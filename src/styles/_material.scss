@@ -2,12 +2,16 @@
     font-family: 'Fontil Sans';
     src: url('../assets/fonts/FontinSans/Fontin_Sans_R.otf') format('opentype');
 }
+@font-face {
+    font-family:'DroidKufi-Regular';
+    src: url("../assets/fonts/DroidKufi-Regular.ttf") format('truetype');
+}
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~@angular/material/theming';
 
 $custom-typography: mat-typography-config(
-    $font-family: 'Fontil Sans, monospace',
+    $font-family: 'DroidKufi-Regular, Fontil Sans, monospace',
     $headline: mat-typography-level(32px, 48px, 700),
     $body-1: mat-typography-level(16px, 24px, 500)
 );
