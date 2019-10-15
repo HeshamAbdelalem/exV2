@@ -1,0 +1,35 @@
+@import "../../../../assets/scss/custom";
+
+mat-card.mat-card {
+    border: 1px solid #9E9E9E;
+    margin: 10px;
+    min-width: 250px;
+    float: right;
+}
+
+mat-card.mat-card:hover {
+    // border: 1px solid rgb(0, 0, 0) !important;
+    // background-color: rgb(224, 220, 222);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+}
+
+mat-card.mat-card.ng-star-inserted {
+    float: right;
+    min-width: 300px;
+}
+
+b.pages-count {
+    position: absolute;
+    left: 10px;
+}
+
+h3.card-category {
+    text-align: center;
+    color: aquamarine;
+}
+
+.main-content{
+    margin-top: 70px;
+    padding: 30px 15px;
+    min-height: calc(100vh - 123px);
+}

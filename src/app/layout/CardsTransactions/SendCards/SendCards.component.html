@@ -1,0 +1,107 @@
+        
+	<form [formGroup]="myForm" dir="rtl" class='main-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>إرسال البطاقات للمندوب</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+
+			<mat-card>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+<!-- كود المستند --><mat-form-field>
+		<input matInput (keyup.enter)="Display()" formControlName="DocumentCode" type="text" placeholder="كود المستند">
+	</mat-form-field>
+<!-- تاريخ المستند --><mat-form-field>
+		<input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()' placeholder="تاريخ المستند" formControlName="DocumentDate">
+		<mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+		<mat-datepicker #pickerDocumentDate></mat-datepicker>
+	</mat-form-field>
+<!-- رقم المستند --><mat-form-field>
+		<input matInput (keyup.enter)="Display()" formControlName="DocumentNo" type="text" placeholder="رقم المستند">
+	</mat-form-field>
+<!-- المندوب --><mat-form-field>
+	    <input matInput type="text" placeholder="المندوب" aria-label="المندوب" 
+		[formControl]="get('Representative')" #Representative (focus)='Representative_AutoComplete()'
+	 	[matAutocomplete]="RepresentativeAuto" required>
+	 	<mat-autocomplete #RepresentativeAuto="matAutocomplete" [displayWith]="displayText" 
+		(optionSelected)="onRepresentativeChanged($event)">
+	 		<mat-option *ngFor="let option of RepresentativeList" [value]="option">
+	 		  {{ option.Name }}
+	 		</mat-option>
+	    </mat-autocomplete>
+	    <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down"
+			(click)='Representative_AutoComplete("")'>
+			<mat-icon>arrow_drop_down</mat-icon>
+		</button>
+	 </mat-form-field>
+	</div>
+			<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div fxFlex>
+					<app-toolbar 
+						AddNewButton='true' AddNewRoute="/CardsTransactions/SendCards/0"
+						SearchButton='true' (OnSearch)='Display()'
+						ClearButton='true' (OnClear)='Clear()'
+						>
+					</app-toolbar>
+				</div>
+			</div>
+		</mat-card>
+		<br>
+		
+<div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+			<mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+			
+    <table mat-table #table [dataSource]="dataSource" matSort>
+
+	<!-- RowNo Column -->
+	<ng-container matColumnDef="RowNo">
+		<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+		<td mat-cell *matCellDef="let row">
+			<div [class.editing]="row?.ID === SendCard?.ID">
+				<span *ngIf="row?.ID !== SendCard?.ID">{{ row.RowNo }}</span>
+			</div>
+		</td>
+	</ng-container>
+        <!-- DocumentCode Column -->        <ng-container matColumnDef="DocumentCode">            <th mat-header-cell *matHeaderCellDef mat-sort-header>كود المستند</th>            <td mat-cell *matCellDef="let row">                {{ row.DocumentCode }}             </td>        </ng-container>
+        <!-- DocumentDate Column -->        <ng-container matColumnDef="DocumentDate">            <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ المستند</th>            <td mat-cell *matCellDef="let row">                {{ row.DocumentDate | date: 'yyyy-MM-dd' }}             </td>        </ng-container>
+        <!-- DocumentNo Column -->        <ng-container matColumnDef="DocumentNo">            <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم المستند</th>            <td mat-cell *matCellDef="let row">                {{ row.DocumentNo }}             </td>        </ng-container>
+        <!-- RepresentativeID Column -->        <ng-container matColumnDef="RepresentativeID">            <th mat-header-cell *matHeaderCellDef mat-sort-header>المندوب</th>            <td mat-cell *matCellDef="let row">                {{ row.Representative?.Name }}             </td>        </ng-container>
+        
+	<!-- Buttons -->
+	<ng-container matColumnDef="Links">
+		<th mat-header-cell *matHeaderCellDef></th>
+		<td mat-cell *matCellDef="let row">
+			<ul>
+				<li> 
+					<a mat-icon-button routerLink="/CardsTransactions/SendCards/{{row.ID}}" matTooltip='تفاصيل'>
+						<mat-icon color="primary">info_outline</mat-icon>
+					</a>					
+				</li>
+				<li>
+					<button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.ID)'>
+						<mat-icon aria-label="delete">delete_forever</mat-icon>
+					</button>
+				</li>
+			</ul>
+		</td>
+	</ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+</mat-card-content>
+		<mat-card-actions align="start">
+			<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+		</mat-card-actions>
+	</mat-card>
+</form>
+
+	<!--
+	, 
+	{
+		path: 'SendCards',
+		loadChildren: './SendCards/SendCards.module#SendCardsModule'
+	}
+	-->
+	

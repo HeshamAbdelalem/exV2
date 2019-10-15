@@ -1,0 +1,323 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ PageTitle }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- DocumentNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentNo" type="text" placeholder="رقم المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- DocumentDate -->
+                    <mat-form-field fxFlex>
+                        <input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()'
+                            placeholder="تاريخ المستند" formControlName="DocumentDate" required>
+                        <mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDocumentDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- DocumentCode -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentCode" type="text" placeholder="كود المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- XCardsOperationsType -->
+                    <!-- <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="نوع العملية" aria-label="نوع العملية" [formControl]="get('XCardsOperationsType')" #XCardsOperationsType (focus)='XCardsOperationsType_AutoComplete("")' [matAutocomplete]="XCardsOperationsTypeAuto" required>
+                        <mat-autocomplete #XCardsOperationsTypeAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onXCardsOperationsTypeChanged($event)">
+                            <mat-option *ngFor="let option of XCardsOperationsTypeList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='XCardsOperationsType_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field> -->
+                    <!-- Guarantor -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="الضامن" aria-label="الضامن"
+                            [formControl]="get('Guarantor')" #Guarantor (focus)='Guarantor_AutoComplete("")'
+                            [matAutocomplete]="GuarantorAuto" required>
+                        <mat-autocomplete #GuarantorAuto="matAutocomplete" [displayWith]="displayText"
+                            (optionSelected)="onGuarantorChanged($event)">
+                            <mat-option *ngFor="let option of GuarantorList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                            aria-label="arrow_drop_down" (click)='Guarantor_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Notes -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-tab-group>
+
+                <!-- ReceiveCardDetail -->
+                <mat-tab>
+                    <ng-template mat-tab-label> تفاصيل البطاقات المستلمة </ng-template>
+                    <div class='tab-content'>
+                        <table class='table table-bordered table-striped'>
+                            <thead>
+                                <tr>
+                                    <th class='serial'>#</th>
+                                    <th> رقم البطاقة </th>
+                                    <th> نوع البطاقة </th>
+                                    <th> كود البطاقة </th>
+                                    <th> الاسم على البطاقة </th>
+                                    <th> اسم صاحب البطاقة </th>
+                                    <th> مصدر البطاقة </th>
+                                    <th> البنك المصدر </th>
+                                    <th> عملة البطاقة </th>
+                                    <th> كلمة المرور</th>
+
+                                    <th> القيمة المتوقعة </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "1"'> سعر الشراء </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "1" || XCardsOperationsTypeID === "3"'> القيمة
+                                        المستحقة
+                                    </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "2"'> نسبة العمولة </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "2"'> قيمة العمولة </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "2"'>عملة العمولة </th>
+                                    <th *ngIf='XCardsOperationsTypeID === "1"'>مدفوعات</th>
+                                    <th>
+                                        <button mat-icon-button color='primary' (click)='add_ReceiveCardDetail()'
+                                            matTooltip="إضافة صف جديد">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container formArrayName="ReceiveCardDetail"
+                                    *ngFor="let prop of formArray('ReceiveCardDetail').controls; let i = index;">
+                                    <tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+                                        <td class='serial'>
+                                            {{i+1}}
+                                        </td>
+                                        <!-- Card -->
+                                        <td>
+                                            <!--  CardNo -->
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="البطاقة" formControlName="Card"
+                                                    #Card id='CardNo_{{i}}' (focus)='Card_AutoComplete("")' (keyup)='Card_TextChanged(Card.value, i)' [matAutocomplete]="CardAuto"
+                                                    required>
+                                                <mat-autocomplete #CardAuto="matAutocomplete"
+                                                    [displayWith]="displayCardNo"
+                                                    (optionSelected)="onCardChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CardList" [value]="option">
+                                                        {{ option.CardNo }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_dowdisplayCardNon"
+                                                    (click)='Card_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                            <!-- <mark> {{ formControl('ReceiveCardDetail', 'CardID', i).value }} </mark> -->
+                                        </td>
+                                        <!--  CardType_Name -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardType?.Name }} -->
+                                            <!-- CardType -->
+                                            <mat-form-field fxFlex>
+                                                <input matInput type="text" aria-label="نوع البطاقة"
+                                                    formControlName="CardType" #CardType
+                                                    (focus)='CardType_AutoComplete("")' [matAutocomplete]="CardTypeAuto"
+                                                    required>
+                                                <mat-autocomplete #CardTypeAuto="matAutocomplete"
+                                                    [displayWith]="displayText"
+                                                    (optionSelected)="onCardTypeChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CardTypeList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_down" (click)='CardType_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!--  CardCode -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardCode }} -->
+                                            <input matInput formControlName="CardCode" type="text">
+                                        </td>
+                                        <!--  NameOnCard -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.NameOnCard }} -->
+                                            <input matInput formControlName="NameOnCard" type="text">
+                                        </td>
+                                        <!--  CardOwnerName -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardOwnerName }} -->
+                                            <input matInput formControlName="CardOwnerName" type="text">
+                                        </td>
+                                        <!--  CardIssuer_Name -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardIssuer?.Name }} -->
+                                            <!-- CardIssuer -->
+                                            <mat-form-field fxFlex>
+                                                <input matInput type="text"
+                                                    aria-label="مصدر البطاقة" formControlName="CardIssuer"
+                                                    #CardIssuer (focus)='CardIssuer_AutoComplete("")'
+                                                    [matAutocomplete]="CardIssuerAuto">
+                                                <mat-autocomplete #CardIssuerAuto="matAutocomplete"
+                                                    [displayWith]="displayText"
+                                                    (optionSelected)="onCardIssuerChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CardIssuerList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_down" (click)='CardIssuer_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!--  Bank_Name -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.Bank?.Name }} -->
+                                            <mat-form-field fxFlex>
+                                                <input matInput type="text" aria-label="البنك المصدر" formControlName="Bank" #Bank
+                                                    (focus)='Bank_AutoComplete("")' [matAutocomplete]="BankAuto">
+                                                <mat-autocomplete #BankAuto="matAutocomplete"
+                                                    [displayWith]="displayText"
+                                                    (optionSelected)="onBankChanged($event, i)">
+                                                    <mat-option *ngFor="let option of BankList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_down" (click)='Bank_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!--  CardCurrency_Name -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardCurrency?.Name }} -->
+                                            <mat-form-field fxFlex>
+                                                <input matInput type="text" aria-label="عملة البطاقة" formControlName="CardCurrency"
+                                                    #CardCurrency (focus)='CardCurrency_AutoComplete("")'
+                                                    [matAutocomplete]="CardCurrencyAuto">
+                                                <mat-autocomplete #CardCurrencyAuto="matAutocomplete"
+                                                    [displayWith]="displayText"
+                                                    (optionSelected)="onCardCurrencyChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CardCurrencyList"
+                                                        [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_down"
+                                                    (click)='CardCurrency_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- CardPin -->
+                                        <td>
+                                            <!-- {{ prop?.value?.Card?.CardPin }} -->
+                                            <input matInput formControlName="CardPin" type="text">
+                                        </td>
+
+                                        <!-- EstimatedValue -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput formControlName="EstimatedValue" type="number">
+                                            </mat-form-field>
+                                        </td>
+
+                                        <!-- BuyPrice -->
+                                        <td *ngIf='XCardsOperationsTypeID === "1"'>
+                                            <mat-form-field>
+                                                <input matInput formControlName="BuyPrice" type="number"
+                                                    (change)='BuyPrice_Changed(i)'>
+                                            </mat-form-field>
+                                        </td>
+
+                                        <!-- DueValue -->
+                                        <td *ngIf='XCardsOperationsTypeID === "1" || XCardsOperationsTypeID === "3"'>
+                                            <mat-form-field>
+                                                <input matInput formControlName="DueValue" type="number">
+                                            </mat-form-field>
+                                        </td>
+
+                                        <!-- CommissionPercent -->
+                                        <td *ngIf='XCardsOperationsTypeID === "2"'>
+                                            <mat-form-field>
+                                                <input matInput formControlName="CommissionPercent" type="number">
+                                            </mat-form-field>
+                                        </td>
+
+                                        <!-- CommissionValue -->
+                                        <td *ngIf='XCardsOperationsTypeID === "2"'>
+                                            <mat-form-field>
+                                                <input matInput formControlName="CommissionValue" type="number">
+                                            </mat-form-field>
+                                        </td>
+
+                                        <!-- Currency -->
+                                        <td *ngIf='XCardsOperationsTypeID === "2"'>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="عملة العمولة"
+                                                    formControlName="CommissionCurrency"
+                                                    (focus)='CommissionCurrency_AutoComplete("")' #CommissionCurrency
+                                                    [matAutocomplete]="CommissionCurrencyAuto">
+                                                <mat-autocomplete #CommissionCurrencyAuto="matAutocomplete"
+                                                    [displayWith]="displayText"
+                                                    (optionSelected)="onCommissionCurrencyChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CommissionCurrencyList"
+                                                        [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+                                                    aria-label="arrow_drop_down"
+                                                    (click)='CommissionCurrency_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <td *ngIf='XCardsOperationsTypeID === "1"'>
+                                            <button mat-icon-button color='primary' matTooltip="إصدار إيصال مدفوعات">
+                                                <mat-icon class="red">open_in_new</mat-icon>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button color='warn' (click)='remove_ReceiveCardDetail(i)'
+                                                matTooltip="حذف">
+                                                <mat-icon class="red">delete_forever</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("DocumentID").value' (OnSave)='Save()'
+                [UpdateButton]='get("DocumentID").value' (OnUpdate)='Update()' [DeleteButton]='get("DocumentID").value'
+                (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()'
+                BackButton='true' BackTo="/CardsTransactions/{{PageUrl}}">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

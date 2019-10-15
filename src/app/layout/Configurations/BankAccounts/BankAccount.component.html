@@ -1,0 +1,72 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>الحساب المصرفي</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Bank -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="المصرف" aria-label="المصرف" [formControl]="get('Bank')" #Bank (focus)='Bank_AutoComplete("")' [matAutocomplete]="BankAuto" required>
+                        <mat-autocomplete #BankAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onBankChanged($event)">
+                            <mat-option *ngFor="let option of BankList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Bank_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+                    <!-- Name -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Name" type="text" placeholder="رقم الحساب" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- Status -->
+                    <!-- <mat-slide-toggle formControlName="Status" color="warn">
+						موقوف
+					</mat-slide-toggle> -->
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Currency -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="العملة" aria-label="العملة" [formControl]="get('Currency')" #Currency (focus)='Currency_AutoComplete("")' [matAutocomplete]="CurrencyAuto" required>
+                        <mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of CurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+                    <!-- StartDate -->
+                    <mat-form-field fxFlex>
+                        <input matInput [matDatepicker]="picker" (focus)='picker.open()' placeholder="تاريخ فتح الحساب" formControlName="StartDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <!-- StartBalance -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="StartBalance" type="text" placeholder="الرصيد الافتتاحي">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Notes -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("AccountID").value' (OnSave)='Save()' [UpdateButton]='get("AccountID").value' (OnUpdate)='Update()' [DeleteButton]='get("AccountID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()'
+                BackButton='true' BackTo="/Configurations/BankAccounts">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

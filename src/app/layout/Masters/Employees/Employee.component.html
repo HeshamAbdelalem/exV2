@@ -1,0 +1,65 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>الموظفين</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Code -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Code" type="text" placeholder="الكود">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- Name -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Name" type="text" placeholder="الاسم" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">person</mat-icon>
+                    </mat-form-field>
+                    <!-- IDNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="IDNo" type="text" placeholder="رقم البطاقة">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Mobile -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Mobile" type="text" placeholder="المحمول">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- WhatsAppNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="WhatsAppNo" type="text" placeholder="رقم الواتساب">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- ViberNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ViberNo" type="text" placeholder="رقم الفايبر">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Email -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Email" type="text" placeholder="البريد الإلكتروني">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- Address -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Address" type="text" placeholder="العنوان">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("PersonID").value' (OnSave)='Save()' [UpdateButton]='get("PersonID").value' (OnUpdate)='Update()' 
+                [DeleteButton]='get("PersonID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true'
+                (OnRefresh)='ngOnInit()' BackButton='true' BackTo="/Masters/Employees">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

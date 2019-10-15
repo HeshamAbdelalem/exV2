@@ -1,0 +1,145 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>بيع عملة نقدي</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <mat-card>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- كود المستند -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="DocumentCode" type="text" placeholder="كود المستند">
+                    </mat-form-field>
+                    <!-- تاريخ المستند -->
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()' placeholder="تاريخ المستند" formControlName="DocumentDate">
+                        <mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDocumentDate></mat-datepicker>
+                    </mat-form-field>
+                    <!-- العملة -->
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="العملة" aria-label="العملة" [formControl]="get('Currency')" #Currency (focus)='Currency_AutoComplete()' [matAutocomplete]="CurrencyAuto" required>
+                        <mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of CurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- الهاتف -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="Phone" type="text" placeholder="الهاتف">
+                    </mat-form-field>
+                    <!-- المشتري -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="Seller" type="text" placeholder="المشتري">
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <div fxFlex>
+                        <app-toolbar AddNewButton='true' AddNewRoute="/CurrencyExchange/CashSellCurrencies/0" SearchButton='true' (OnSearch)='Display()' ClearButton='true' (OnClear)='Clear()'>
+                        </app-toolbar>
+                    </div>
+                </div>
+            </mat-card>
+            <br>
+
+            <div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+                <mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+
+                <table mat-table #table [dataSource]="dataSource" matSort>
+
+                    <!-- RowNo Column -->
+                    <ng-container matColumnDef="RowNo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                        <td mat-cell *matCellDef="let row">
+                            <div [class.editing]="row?.ID === SellCurrency?.ID">
+                                <span *ngIf="row?.ID !== SellCurrency?.ID">{{ row.RowNo }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- DocumentCode Column -->
+                    <ng-container matColumnDef="DocumentCode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>كود المستند</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.DocumentCode }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- DocumentDate Column -->
+                    <ng-container matColumnDef="DocumentDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ المستند</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.DocumentDate | date: 'yyyy-MM-dd' }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- Amount Column -->
+                    <ng-container matColumnDef="Amount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>المبلغ</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.Amount }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CurrencyID Column -->
+                    <ng-container matColumnDef="CurrencyID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>العملة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.Currency?.Name }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Phone Column -->
+                    <ng-container matColumnDef="Phone">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>الهاتف</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.Phone }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Seller Column -->
+                    <ng-container matColumnDef="Seller">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>المشتري</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.Seller }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- Buttons -->
+                    <ng-container matColumnDef="Links">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <ul>
+                                <li>
+                                    <a mat-icon-button routerLink="/CurrencyExchange/CashSellCurrencies/{{row.ID}}" matTooltip='تفاصيل'>
+                                        <mat-icon color="primary">info_outline</mat-icon>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.ID)'>
+                                        <mat-icon aria-label="delete">delete_forever</mat-icon>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="start">
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card-actions>
+    </mat-card>
+</form>

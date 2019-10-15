@@ -1,0 +1,329 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>مسحوبات البطاقات</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="container">
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- DocumentNo -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="DocumentNo" type="text" placeholder="رقم المستند">
+						<mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+					</mat-form-field>
+					<!-- DocumentDate -->
+					<mat-form-field fxFlex>
+						<input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()'
+							placeholder="تاريخ المستند" formControlName="DocumentDate" required>
+						<mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+						<mat-datepicker #pickerDocumentDate></mat-datepicker>
+					</mat-form-field>
+					<!-- DocumentCode -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="DocumentCode" type="text" placeholder="كود المستند">
+						<mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+					</mat-form-field>
+
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- Representative -->
+					<mat-form-field fxFlex>
+						<input matInput type="text" placeholder="المندوب" aria-label="المندوب"
+							[formControl]="get('Representative')" #Representative
+							(focus)='Representative_AutoComplete("")' [matAutocomplete]="RepresentativeAuto" required>
+						<mat-autocomplete #RepresentativeAuto="matAutocomplete" [displayWith]="displayText"
+							(optionSelected)="onRepresentativeChanged($event)">
+							<mat-option *ngFor="let option of RepresentativeList" [value]="option">
+								{{ option.Name }}
+							</mat-option>
+						</mat-autocomplete>
+						<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+							aria-label="arrow_drop_down" (click)='Representative_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+					</mat-form-field>
+					<!-- Currency -->
+					<mat-form-field fxFlex>
+						<input matInput type="text" placeholder="عملة السحب" aria-label="عملة السحب"
+							[formControl]="get('DrawCurrency')" #DrawCurrency (focus)='DrawCurrency_AutoComplete("")'
+							[matAutocomplete]="DrawCurrencyAuto" required>
+						<mat-autocomplete #DrawCurrencyAuto="matAutocomplete" [displayWith]="displayText"
+							(optionSelected)="onDrawCurrencyChanged($event)">
+							<mat-option *ngFor="let option of DrawCurrencyList" [value]="option">
+								{{ option.Name }}
+							</mat-option>
+						</mat-autocomplete>
+						<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+							aria-label="arrow_drop_down" (click)='DrawCurrency_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+					</mat-form-field>
+
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- Notes -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+						<mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+					</mat-form-field>
+				</div>
+			</div>
+			<mat-tab-group>
+
+				<!-- DrawCardDetail -->
+				<mat-tab>
+					<ng-template mat-tab-label> تفاصيل مسحوبات البطاقات </ng-template>
+					<div class='tab-content'>
+
+						<table class='table table-bordered table-striped'>
+							<thead>
+								<tr>
+									<th class='serial'>#</th>
+									<!-- <th> البطاقة </th> -->
+									<th> البطاقة </th>
+									<th> نوع البطاقة </th>
+                                    <th> كود البطاقة </th>
+                                    <th> الاسم على البطاقة </th>
+                                    <th> اسم صاحب البطاقة </th>
+                                    <th> مصدر البطاقة </th>
+                                    <th> البنك المصدر </th>
+                                    <th> عملة البطاقة </th>
+									<th> كلمة المرور</th>
+									
+									<th> مشكلة البطاقة </th>
+									<th> قيمة السحب </th>
+									<th> قيمة السحب بعملة البطاقة </th>
+									<th> إجمالي قيمة المسحوبات </th>
+									<th> الرصيد الفعلي </th>
+									<th> تم السحب </th>
+
+									<th>
+										<button mat-icon-button color='primary' (click)='add_DrawCardDetail()'
+											matTooltip="إضافة صف جديد">
+											<mat-icon>add</mat-icon>
+										</button>
+									</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<ng-container formArrayName="DrawCardDetail"
+									*ngFor="let prop of formArray('DrawCardDetail').controls; let i = index;">
+									<tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+										<td class='serial'>
+											{{i+1}}
+										</td>
+										<!-- ReceiveCardDetail -->
+										<!-- <td>
+											<mat-form-field>
+												<input matInput type="text" aria-label="البطاقة"
+													formControlName="ReceiveCardDetail" #ReceiveCardDetail
+													[matAutocomplete]="ReceiveCardDetailAuto" 
+													(focus)='ReceiveCardDetail_AutoComplete("")' required>
+												<mat-autocomplete #ReceiveCardDetailAuto="matAutocomplete"
+													[displayWith]="displayText"
+													(optionSelected)="onReceiveCardDetailChanged($event, i)">
+													<mat-option *ngFor="let option of ReceiveCardDetailList"
+														[value]="option">
+														{{ option.Card_CardNo }}
+													</mat-option>
+												</mat-autocomplete>
+												<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+													aria-label="arrow_drop_down"
+													(click)='ReceiveCardDetail_AutoComplete("")'>
+													<mat-icon>arrow_drop_down</mat-icon>
+												</button>
+											</mat-form-field>
+										</td> -->
+									
+										<!-- Card -->
+										<td>
+											<mat-form-field>
+												<input matInput type="text" aria-label="البطاقة " formControlName="Card"
+													#Card [matAutocomplete]="CardAuto" (focus)='Card_AutoComplete("")'
+													required>
+												<mat-autocomplete #CardAuto="matAutocomplete"
+													[displayWith]="displayCardNo"
+													(optionSelected)="onCardChanged($event, i)">
+													<mat-option *ngFor="let option of CardList" [value]="option">
+														{{ option.CardNo }}
+													</mat-option>
+												</mat-autocomplete>
+												<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+													aria-label="arrow_drop_down" (click)='Card_AutoComplete("")'>
+													<mat-icon>arrow_drop_down</mat-icon>
+												</button>
+											</mat-form-field>
+										</td><!--  CardType_Name -->
+										<td>{{ prop?.value?.Card?.CardType?.Name }}</td>
+										<!--  CardCode -->
+										<td>{{ prop?.value?.Card?.CardCode }}</td>
+										<!--  NameOnCard -->
+										<td>{{ prop?.value?.Card?.NameOnCard }}</td>
+										<!--  CardOwnerName -->
+										<td>{{ prop?.value?.Card?.CardOwnerName }}</td>
+										<!--  CardIssuer_Name -->
+										<td>{{ prop?.value?.Card?.CardIssuer?.Name }}</td>
+										<!--  Bank_Name -->
+										<td>{{ prop?.value?.Card?.Bank?.Name }}</td>
+										<!--  CardCurrency_Name -->
+										<td>{{ prop?.value?.Card?.CardCurrency?.Name }}</td>
+										<!-- CardPin -->
+										<td>{{ prop?.value?.Card?.CardPin }}</td>
+
+										<!-- XCardProblem -->
+										<td>
+											<mat-form-field>
+												<input matInput type="text" aria-label="مشكلة البطاقة"
+													formControlName="XCardProblem" #XCardProblem
+													[matAutocomplete]="XCardProblemAuto">
+												<mat-autocomplete #XCardProblemAuto="matAutocomplete"
+													[displayWith]="displayText"
+													(optionSelected)="onXCardProblemChanged($event, i)">
+													<mat-option *ngFor="let option of XCardProblemList"
+														[value]="option">
+														{{ option.Name }}
+													</mat-option>
+												</mat-autocomplete>
+												<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+													aria-label="arrow_drop_down"
+													(click)='XCardProblem_AutoComplete("")'>
+													<mat-icon>arrow_drop_down</mat-icon>
+												</button>
+											</mat-form-field>
+										</td>
+
+										<!-- DrawValue -->
+										<td>
+											<mat-form-field>
+												<input matInput formControlName="DrawValue" type="number" required>
+											</mat-form-field>
+										</td>
+
+										<!-- DrawValueInCadCurrency -->
+										<td>
+											<mat-form-field>
+												<input matInput formControlName="DrawValueInCadCurrency" type="number">
+											</mat-form-field>
+										</td>
+
+										<!-- DrawValueTotal -->
+										<td>
+											<mat-form-field>
+												<input matInput formControlName="DrawValueTotal" type="number">
+											</mat-form-field>
+										</td>
+
+										<!-- ActualBalance -->
+										<td>
+											<mat-form-field>
+												<input matInput formControlName="ActualBalance" type="number">
+											</mat-form-field>
+										</td>
+
+										<!-- DrawingIsDone -->
+										<td>
+											<section>
+												<mat-checkbox formControlName="DrawingIsDone" matTooltip="تم السحب">
+												</mat-checkbox>
+											</section>
+										</td>
+
+
+										<td>
+											<button mat-icon-button color='warn' (click)='remove_DrawCardDetail(i)'
+												matTooltip="حذف">
+												<mat-icon class="red">delete_forever</mat-icon>
+											</button>
+										</td>
+
+									</tr>
+								</ng-container>
+							</tbody>
+						</table>
+
+					</div>
+				</mat-tab>
+						
+				<!-- DrawCurrencyConversion -->
+				<mat-tab>
+					<ng-template mat-tab-label> معدلات تحويل عملات المسحوبات </ng-template>
+					<div class='tab-content'>
+
+						<table class='table table-bordered table-striped'>
+							<thead>
+								<tr>
+									<th class='serial'>#</th>
+									<th> العملة </th>
+									<th> نسبة التحويل </th>
+
+									<th>
+										<button mat-icon-button color='primary' (click)='add_DrawCurrencyConversion()'
+											matTooltip="إضافة صف جديد">
+											<mat-icon>add</mat-icon>
+										</button>
+									</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<ng-container formArrayName="DrawCurrencyConversion"
+									*ngFor="let prop of formArray('DrawCurrencyConversion').controls; let i = index;">
+									<tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+										<td class='serial'>
+											{{i+1}}
+										</td>
+										<!-- Currency -->
+										<td>
+											<mat-form-field>
+												<input matInput type="text" aria-label="العملة"
+													formControlName="Currency" #Currency
+													[matAutocomplete]="CurrencyAuto" required>
+												<mat-autocomplete #CurrencyAuto="matAutocomplete"
+													[displayWith]="displayText"
+													(optionSelected)="onCurrencyChanged($event, i)">
+													<mat-option *ngFor="let option of CurrencyList" [value]="option">
+														{{ option.Name }}
+													</mat-option>
+												</mat-autocomplete>
+												<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+													aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+													<mat-icon>arrow_drop_down</mat-icon>
+												</button>
+											</mat-form-field>
+										</td>
+
+										<!-- ConversionRate -->
+										<td>
+											<mat-form-field>
+												<input matInput formControlName="ConversionRate" type="number" required>
+											</mat-form-field>
+										</td>
+
+
+										<td>
+											<button mat-icon-button color='warn'
+												(click)='remove_DrawCurrencyConversion(i)' matTooltip="حذف">
+												<mat-icon class="red">delete_forever</mat-icon>
+											</button>
+										</td>
+
+									</tr>
+								</ng-container>
+							</tbody>
+						</table>
+
+					</div>
+				</mat-tab>
+
+			</mat-tab-group>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<app-toolbar [SaveButton]='!get("DocumentID").value' (OnSave)='Save()'
+				[UpdateButton]='get("DocumentID").value' (OnUpdate)='Update()' [DeleteButton]='get("DocumentID").value'
+				(OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()'
+				BackButton='true' BackTo="/CardsTransactions/DrawCards">
+			</app-toolbar>
+		</mat-card-actions>
+	</mat-card>
+</form>

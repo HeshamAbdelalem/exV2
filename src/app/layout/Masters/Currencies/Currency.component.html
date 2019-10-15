@@ -1,0 +1,75 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>العملات</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Code -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Code" type="text" placeholder="الكود">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                    <!-- Name -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Name" type="text" placeholder="الوصف" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                    <!-- Symbole -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Symbole" type="text" placeholder="الرمز" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">euro_symbol</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- CashBuyPrice -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CashBuyPrice" type="number" placeholder="سعر الشراء - نقدي" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+                    </mat-form-field>
+
+                    <!-- CashSellPrice -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CashSellPrice" type="number" placeholder="سعر البيع - نقدي" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- ChequeBuyPrice -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ChequeBuyPrice" type="number" placeholder="سعر الشراء - صك" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+                    </mat-form-field>
+
+                    <!-- ChequeSellPrice -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ChequeSellPrice" type="number" placeholder="سعر البيع - صك" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+                    </mat-form-field>
+                </div>
+                <!-- Status -->
+                <!-- <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <div fxFlex>
+                        <mat-slide-toggle formControlName="Status" color="primary">
+                            موقوف
+                        </mat-slide-toggle>
+                    </div>
+                    <div fxFlex>
+                        <section>
+                            <mat-checkbox formControlName="Status" matTooltip="Status" color="primary">فعال</mat-checkbox>
+                        </section>
+                    </div>
+                </div> -->
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("NamedObjectID").value' (OnSave)='Save()' [UpdateButton]='get("NamedObjectID").value' (OnUpdate)='Update()' [DeleteButton]='get("NamedObjectID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true'
+                (OnRefresh)='ngOnInit()' BackButton='true' BackTo="/Masters/Currencies">
+            </app-toolbar>
+
+        </mat-card-actions>
+    </mat-card>
+</form>

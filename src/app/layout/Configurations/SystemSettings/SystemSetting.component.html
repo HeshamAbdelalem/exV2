@@ -1,0 +1,207 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>إعدادات المنظومة</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Currency -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="العملة المحلية" aria-label="العملة المحلية" [formControl]="get('NationalCurrency')" #NationalCurrency (focus)='NationalCurrency_AutoComplete("")' [matAutocomplete]="NationalCurrencyAuto">
+                        <mat-autocomplete #NationalCurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onNationalCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of NationalCurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='NationalCurrency_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Currency -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="العملة الأجنبية الأكثر إستخدامًا" aria-label="العملة الأجنبية الأكثر إستخدامًا" [formControl]="get('DefaultForeignCurrency')" #DefaultForeignCurrency (focus)='DefaultForeignCurrency_AutoComplete("")' [matAutocomplete]="DefaultForeignCurrencyAuto">
+                        <mat-autocomplete #DefaultForeignCurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onDefaultForeignCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of DefaultForeignCurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='DefaultForeignCurrency_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-tab-group>
+
+                <!-- StaticAccount -->
+                <mat-tab>
+                    <ng-template mat-tab-label> الحسابات الثابتة </ng-template>
+                    <div class='tab-content'>
+                        <table class='table table-bordered table-striped'>
+                            <thead>
+                                <tr>
+                                    <th class='serial'>#</th>
+                                    <th> نوع الحساب الثابت </th>
+                                    <th> الحساب </th>
+                                    <th> العملة </th>
+
+                                    <th>
+                                        <button mat-icon-button color='primary' (click)='add_StaticAccount()' matTooltip="إضافة صف جديد">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container formArrayName="StaticAccount" *ngFor="let prop of formArray('StaticAccount').controls; let i = index;">
+                                    <tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+                                        <td class='serial'>
+                                            {{i+1}}
+                                        </td>
+                                        <!-- XStaticAccount -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="نوع الحساب الثابت" (focus)='StaticAccount_XStaticAccount_AutoComplete("")' formControlName="XStaticAccount" #XStaticAccount [matAutocomplete]="XStaticAccountAuto" required>
+                                                <mat-autocomplete #XStaticAccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="StaticAccounton_onXStaticAccountChanged($event, i)">
+                                                    <mat-option *ngFor="let option of StaticAccounton_XStaticAccountList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='StaticAccount_XStaticAccount_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- Account -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label=" الحساب" (click)='StaticAccount_Account_AutoComplete("")' formControlName="Account" #Account [matAutocomplete]="AccountAuto" required>
+                                                <mat-autocomplete #AccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="StaticAccount_onAccountChanged($event, i)">
+                                                    <mat-option *ngFor="let option of StaticAccount_AccountList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='StaticAccount_Account_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- Currency -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="العملة" (click)='StaticAccount_Currency_AutoComplete("")' formControlName="Currency" #Currency [matAutocomplete]="CurrencyAuto" required>
+                                                <mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="StaticAccount_onCurrencyChanged($event, i)">
+                                                    <mat-option *ngFor="let option of StaticAccount_CurrencyList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='StaticAccount_Currency_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button color='warn' (click)='remove_StaticAccount(i)' matTooltip="حذف">
+                                                <mat-icon class="red">delete_forever</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </mat-tab>
+
+                <!-- CommissionAccount -->
+                <mat-tab>
+                    <ng-template mat-tab-label> حسابات العمولات </ng-template>
+                    <div class='tab-content'>
+                        <table class='table table-bordered table-striped'>
+                            <thead>
+                                <tr>
+                                    <th class='serial'>#</th>
+                                    <th> العملة </th>
+                                    <th> حساب العمولات المحصلة </th>
+                                    <th> حساب العمولات الممنوحة </th>
+                                    <th>
+                                        <button mat-icon-button color='primary' (click)='add_CommissionAccount()' matTooltip="إضافة صف جديد">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container formArrayName="CommissionAccount" *ngFor="let prop of formArray('CommissionAccount').controls; let i = index;">
+                                    <tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+                                        <td class='serial'>
+                                            {{i+1}}
+                                        </td>
+                                        <!-- Currency -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="العملة" (focus)='CommissionAccount_Currency_AutoComplete("")' formControlName="Currency" #Currency [matAutocomplete]="CurrencyAuto" required>
+                                                <mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="CommissionAccount_onCurrencyChanged($event, i)">
+
+                                                    <mat-option *ngFor="let option of CommissionAccount_CurrencyList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CommissionAccount_Currency_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- DebitAccount -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="حساب العمولات المحصلة" (focus)='CommissionAccount_DebitAccount_AutoComplete("")' formControlName="DebitAccount" #DebitAccount [matAutocomplete]="DebitAccountAuto" required>
+                                                <mat-autocomplete #DebitAccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="CommissionAccount_onDebitAccountChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CommissionAccount_DebitAccountList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CommissionAccount_DebitAccount_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- CreditAccount -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="حساب العمولات الممنوحة" (focus)='CommissionAccount_CreditAccount_AutoComplete("")' formControlName="CreditAccount" #CreditAccount [matAutocomplete]="CreditAccountAuto" required>
+                                                <mat-autocomplete #CreditAccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="CommissionAccount_onCreditAccountChanged($event, i)">
+                                                    <mat-option *ngFor="let option of CommissionAccount_CreditAccountList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CommissionAccount_CreditAccount_AutoComplete("")'>
+                                                    <mat-icon>arrow_drop_down</mat-icon>
+                                                </button>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button color='warn' (click)='remove_CommissionAccount(i)' matTooltip="حذف">
+                                                <mat-icon class="red">delete_forever</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("ID").value' (OnSave)='Save()' [UpdateButton]='get("ID").value' (OnUpdate)='Update()' [DeleteButton]='false' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()'
+                BackButton='true' BackTo="/Configurations/SystemSettings">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

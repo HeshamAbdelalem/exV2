@@ -1,0 +1,121 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>المصارف</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+
+			<mat-card>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- الكود -->
+					<mat-form-field>
+						<input matInput (keyup.enter)="Display()" formControlName="Code" type="text"
+							placeholder="الكود">
+					</mat-form-field>
+					<!-- الاسم العربي -->
+					<mat-form-field>
+						<input matInput (keyup.enter)="Display()" formControlName="Name" type="text"
+							placeholder="الاسم العربي">
+					</mat-form-field>
+					<!-- الاسم الانجليزي -->
+					<mat-form-field>
+						<input matInput (keyup.enter)="Display()" formControlName="EnglishName" type="text"
+							placeholder="الاسم الانجليزي">
+					</mat-form-field>
+					<!-- نسبة الخصم على السحب من البطاقات -->
+					<mat-form-field>
+						<input matInput (keyup.enter)="Display()" formControlName="DiscountPercent" type="number"
+							placeholder="نسبة الخصم على السحب من البطاقات">
+					</mat-form-field>
+				</div>
+
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<div fxFlex>
+						<app-toolbar SaveButton='true' (OnSave)='Save()' SearchButton='true' (OnSearch)='Display()'
+							ClearButton='true' (OnClear)='Clear()'>
+						</app-toolbar>
+					</div>
+				</div>
+			</mat-card>
+			<br>
+
+			<div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+				<mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+
+				<table mat-table #table [dataSource]="dataSource" matSort>
+
+					<!-- RowNo Column -->
+					<ng-container matColumnDef="RowNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+						<td mat-cell *matCellDef="let row">
+							<div [class.editing]="row?.NamedObjectID === Bank?.NamedObjectID">
+								<span *ngIf="row?.NamedObjectID !== Bank?.NamedObjectID">{{ row.RowNo }}</span>
+							</div>
+						</td>
+					</ng-container>
+
+					<!-- Name Column -->
+					<ng-container matColumnDef="Name">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم العربي</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Name }}
+						</td>
+					</ng-container>
+
+
+					<!-- Code Column -->
+					<ng-container matColumnDef="Code">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>الكود</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Code }}
+						</td>
+					</ng-container>
+
+
+					<!-- EnglishName Column -->
+					<ng-container matColumnDef="EnglishName">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>الاسم الانجليزي</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.EnglishName }}
+						</td>
+					</ng-container>
+
+
+					<!-- DiscountPercent Column -->
+					<ng-container matColumnDef="DiscountPercent">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>نسبة الخصم على السحب من البطاقات</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.DiscountPercent }}
+						</td>
+					</ng-container>
+
+
+					<!-- Buttons -->
+					<ng-container matColumnDef="Links">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let row">
+							<ul>
+								<li>
+									<a mat-icon-button (click)='Edit(row)' matTooltip='تعديل'>
+										<mat-icon color="primary">edit</mat-icon>
+									</a>
+								</li>
+								<li>
+									<button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.NamedObjectID)'>
+										<mat-icon aria-label="delete">delete_forever</mat-icon>
+									</button>
+								</li>
+							</ul>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				</table>
+			</div>
+		</mat-card-content>
+		<mat-card-actions align="start">
+			<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+		</mat-card-actions>
+	</mat-card>
+</form>

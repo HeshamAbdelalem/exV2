@@ -1,0 +1,77 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>أسعار العملات</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="container">
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- DocumentDate -->
+					<mat-form-field fxFlex>
+						<input matInput [matDatepicker]="picker" (focus)='picker.open()' placeholder="تاريخ المستند"
+							formControlName="DocumentDate" required>
+						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+						<mat-datepicker #picker></mat-datepicker>
+					</mat-form-field>
+					<!-- DocumentCode -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="DocumentCode" type="text" placeholder="كود المستند" required>
+					</mat-form-field>
+					<!-- Currency -->
+					<mat-form-field fxFlex>
+						<input matInput type="text" placeholder="العملة" aria-label="العملة"
+							[formControl]="get('Currency')" #Currency (focus)='Currency_AutoComplete("")'
+							[matAutocomplete]="CurrencyAuto" required>
+						<mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText"
+							(optionSelected)="onCurrencyChanged($event)">
+							<mat-option *ngFor="let option of CurrencyList" [value]="option">
+								{{ option.Name }}
+							</mat-option>
+						</mat-autocomplete>
+						<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+							aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- CashSellPrice -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="CashSellPrice" type="text" placeholder="سعر البيع - نقدي" required>
+						<mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+					</mat-form-field>
+					<!-- CashBuyPrice -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="CashBuyPrice" type="text" placeholder="سعر الشراء - نقدي" required>
+						<mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- ChequeSellPrice -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="ChequeSellPrice" type="text" placeholder="سعر البيع - صك" required>
+						<mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+					</mat-form-field>
+					<!-- ChequeBuyPrice -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="ChequeBuyPrice" type="text" placeholder="سعر الشراء - صك" required>
+						<mat-icon matSuffix color='primary' class="mat-18">format_list_numbered</mat-icon>
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- Notes -->
+					<mat-form-field fxFlex>
+						<input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+					</mat-form-field>
+				</div>
+			</div>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<app-toolbar [SaveButton]='!get("DocumentID").value' (OnSave)='Save()' [UpdateButton]='get("DocumentID").value'
+				(OnUpdate)='Update()' [DeleteButton]='get("DocumentID").value' (OnDelete)='Delete()' NewButton='true'
+				(OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()' BackButton='true'
+				BackTo="/CurrencyExchange/CurrencyPrices">
+			</app-toolbar>
+		</mat-card-actions>
+	</mat-card>
+</form>

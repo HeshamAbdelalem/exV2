@@ -1,0 +1,182 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>البحث عن البطاقات</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <mat-card>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- رقم البطاقة -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="CardNo" type="text" placeholder="رقم البطاقة">
+                    </mat-form-field>
+                    <!-- نوع البطاقة -->
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="نوع البطاقة" aria-label="نوع البطاقة" [formControl]="get('CardType')" #CardType (focus)='CardType_AutoComplete("")' [matAutocomplete]="CardTypeAuto">
+                        <mat-autocomplete #CardTypeAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCardTypeChanged($event)">
+                            <mat-option *ngFor="let option of CardTypeList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CardType_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- كود البطاقة -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="CardCode" type="text" placeholder="كود البطاقة">
+                    </mat-form-field>
+                    <!-- اسم صاحب البطاقة -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="CardOwnerName" type="text" placeholder="اسم صاحب البطاقة">
+                    </mat-form-field>
+                    <!-- مصدر البطاقة -->
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="مصدر البطاقة" aria-label="مصدر البطاقة" [formControl]="get('CardIssuer')" #CardIssuer (focus)='CardIssuer_AutoComplete("")' [matAutocomplete]="CardIssuerAuto">
+                        <mat-autocomplete #CardIssuerAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCardIssuerChanged($event)">
+                            <mat-option *ngFor="let option of CardIssuerList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CardIssuer_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- هاتف صاحب البطاقة -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="OwnerPhone" type="text" placeholder="هاتف صاحب البطاقة">
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <div fxFlex>
+                        <app-toolbar 
+                        SearchButton='true' 
+                        (OnSearch)='Display()' 
+                        ClearButton='true' 
+                        (OnClear)='Clear()'>
+                        </app-toolbar>
+                    </div>
+                </div>
+            </mat-card>
+            <br>
+
+            <div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+                <mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+
+                <table mat-table #table [dataSource]="dataSource" matSort>
+
+                    <!-- RowNo Column -->
+                    <ng-container matColumnDef="RowNo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                        <td mat-cell *matCellDef="let row">
+                            <div [class.editing]="row?.ID === Card?.ID">
+                                <span *ngIf="row?.ID !== Card?.ID">{{ row.RowNo }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- CardNo Column -->
+                    <ng-container matColumnDef="CardNo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.CardNo }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CardTypeID Column -->
+                    <ng-container matColumnDef="CardTypeID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.CardType?.Name }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CardCode Column -->
+                    <ng-container matColumnDef="CardCode">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>كود البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.CardCode }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CardOwnerName Column -->
+                    <ng-container matColumnDef="CardOwnerName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>اسم صاحب البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.CardOwnerName }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CardIssuerID Column -->
+                    <ng-container matColumnDef="CardIssuerID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>مصدر البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.CardIssuer?.Name }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- OwnerPhone Column -->
+                    <ng-container matColumnDef="OwnerPhone">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>هاتف صاحب البطاقة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.OwnerPhone }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- Buttons -->
+                    <ng-container matColumnDef="Links">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox></mat-checkbox>
+                            <!-- <ul>
+                                <li>
+                                    <a mat-icon-button routerLink="/CardsTransactions/Cards/{{row.ID}}" matTooltip='تفاصيل'>
+                                        <mat-icon color="primary">info_outline</mat-icon>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.ID)'>
+                                        <mat-icon aria-label="delete">delete_forever</mat-icon>
+                                    </button>
+                                </li>
+                            </ul> -->
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="start">
+            <button mat-raised-button color="primary">
+                موافق |
+                <mat-icon>done</mat-icon>
+            </button>
+
+            <button mat-raised-button color="accent">
+                إلغاء |
+                <mat-icon>close</mat-icon>
+            </button>
+            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+            
+            <!-- 
+            <button mat-raised-button (click)='close()' [mat-dialog-close]="Card">
+                خروج |
+                <mat-icon class="mat-18">close</mat-icon>
+            </button> 
+
+            <mark>
+                {{ data | json }}
+            </mark>
+                -->            
+        </mat-card-actions>
+    </mat-card>
+</form>

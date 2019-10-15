@@ -1,0 +1,35 @@
+table, td, th, label {
+    font-family: 'DroidKufi-Regular' !important;
+}
+
+mat-card.mat-card {
+    font-family: 'DroidKufi-Regular' !important;
+}
+
+mat-card-header.mat-card-header {
+    font-family: 'DroidKufi-Regular' !important;
+    background-color: #2196F3;
+    padding: 10px;
+    top: -40px;
+    position: relative;
+    border-radius: 5px;
+    color: white;
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4);
+    background: linear-gradient(60deg, #80DEEA, #00BCD4);
+}
+
+tr.deleted {
+	background-color: rgba(223, 80, 80, 0.692);
+}
+
+.margin-100 {
+    margin-top: 100px;
+}
+
+.center {
+    text-align: center !important;
+}
+
+h4 {
+    text-align: right !important;
+}

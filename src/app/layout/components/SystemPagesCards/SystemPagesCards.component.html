@@ -1,0 +1,23 @@
+<div fxFlex class="main-content" dir="rtl">
+    <div>
+        <mat-card fxFlex>
+            <mat-card-header>
+                <mat-card-title>
+                    {{ MyMenu?.Name }} ({{Pages?.length}})
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+                <div>
+                    <mat-card fxFlex='33' class="page-card" *ngFor='let page of Pages; let i = index;'>
+                        <h3 class="card-category"> {{ page?.Name }}</h3>
+                        <h5 class="card-title"> {{ page.Hint }}</h5>
+                        <a routerLink="/{{page?.Code}}" class="btn btn-rose btn-round">اختر</a>
+                    </mat-card>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

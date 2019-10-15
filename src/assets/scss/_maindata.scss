@@ -1,0 +1,197 @@
+.mat-table {
+    font-family: 'DroidKufi-Regular' !important;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    ul {
+        list-style: none;
+    }   
+    li {
+        float: left;
+    }
+    input:not(.matAutocomplete) {
+        // font-size: 20px;
+        // border-bottom: 1px solid #3F51B5;
+        // margin-right: 20px;
+        border: none;
+        outline: none;
+    }
+    input:focus {
+        background-color: #d6d6d4b6;            
+        font-weight: 900;
+    }
+    #lbl {
+        font-size: 20px !important;
+    }
+    td.mat-cell.mat-column-RowNo {
+        width: 100px;
+    }
+}
+ 
+table {
+    width: 100% !important;
+}
+
+div.title {
+    font-family: DroidKufi-Regular;
+    margin-right: 10px;
+    margin-left: 50px;
+    font-size: 0.75cm;
+    color: #E91E63;
+}
+
+.mat-paginator-page-size-label {
+    display: none !important;
+}
+
+// th input {
+//     border: 1px solid #E0E0E0 !important;
+//     padding: 10px !important;
+//     border-radius: 5px;
+// }
+
+// th input:hover, th input:focus {    
+//     border: 1px solid #E0E0E0 !important;
+//     /*box-shadow: 0 5px 5px -3px #E0E0E0, 0 4px 5px 1px #E0E0E0, 0 3px 14px 2px #E0E0E0;*/
+// }
+
+// .mat-table {
+//     font-family: 'DroidKufi-Regular' !important;
+//     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+//         0 1px 5px 0 rgba(0, 0, 0, 0.12);
+//     ul {
+//         list-style: none;
+//     }   
+//     li {
+//         float: left;
+//     }
+//     input:not(.matAutocomplete) {
+//         // font-size: 20px;
+//         // border-bottom: 1px solid #3F51B5;
+//         // margin-right: 20px;
+//         border: none;
+//         outline: none;
+//     }
+//     input:focus {
+//         background-color: #d6d6d4b6;            
+//         font-weight: 900;
+//     }
+//     #lbl {
+//         font-size: 20px !important;
+//     }
+//     td.mat-cell.mat-column-RowNo {
+//         width: 100px;
+//     }
+// }
+ 
+
+// .mat-row:hover {
+//     background-color: #d6d6d4b6;    
+// }
+
+// .mat-row {
+//     cursor: pointer;
+// }
+
+.editing {
+    text-align: center;
+    // background-color: red;
+    // padding: 5px;
+    // border-radius: 50%;
+    // width: 40px;
+    // color: white;    
+    width: 15px;
+    height: 30px;
+    border-right: solid 15px rgb(200,30,50);
+    border-bottom: solid 15px transparent;
+    border-top: solid 15px transparent;
+    
+    animation: blinker 1s step-start infinite;
+    -webkit-animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+    50% {
+        border-right: solid 1px transparent;
+    }
+  }
+
+
+// div.title {
+//     font-family: DroidKufi-Regular;
+//     margin-right: 10px;
+//     margin-left: 50px;
+//     font-size: 0.75cm;
+//     color: #E91E63;
+// }
+
+// table.mat-table {
+//     border-spacing: 0;
+//     width: 80%;
+//     position: fixed;
+// }
+
+// .mat-elevation-z8 {
+//     box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+//     width: 80%;
+//     position: fixed;
+// }
+
+// .mat-input-suffix.mat-form-field-suffix {
+//     font-size: 20px;
+// }
+
+// .add-new {
+//     position: fixed;
+//     bottom: 20px;
+//     left: 20px;
+// } 
+
+// a.add-new {
+//     font-family: 'DroidKufi-Regular' !important;
+// }
+
+.word-color {
+    color: #2196F3 !important;
+}
+
+.excel-color {
+    color: green !important;
+}
+
+.pdf-color {
+    color: maroon !important;
+}
+
+th.mat-column-Add-New, th.mat-column-Links-Column {
+    text-align: left !important;
+}
+
+th {
+    font-size: 15px !important;
+}
+
+// table style
+table  {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  table  td, table  th {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  table tr:nth-child(even){background-color: #f2f2f2;}
+  
+//   table tr:hover {background-color: #ddd;}
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    // background-color: #4CAF50;
+    color: black;
+    font-weight: 900;
+    // background: linear-gradient(60deg, rgb(231, 231, 235), #3F51B5);
+  }

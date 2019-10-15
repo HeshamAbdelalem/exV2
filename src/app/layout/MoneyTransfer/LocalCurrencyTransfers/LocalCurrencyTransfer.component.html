@@ -1,0 +1,130 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>تحويل داخلي</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- DocumentNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentNo" type="text" placeholder="رقم المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- DocumentDate -->
+                    <mat-form-field fxFlex>
+                        <input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()' placeholder="تاريخ المستند" formControlName="DocumentDate" required>
+                        <mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDocumentDate></mat-datepicker>
+                    </mat-form-field>
+                    <!-- DocumentCode -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentCode" type="text" placeholder="كود المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Currency -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="العملة" aria-label="العملة" [formControl]="get('Currency')" #Currency (focus)='Currency_AutoComplete("")' [matAutocomplete]="CurrencyAuto" required>
+                        <mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of CurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+                    <!-- Amount -->
+                    <mat-form-field fxFlex>
+                        <input matInput id="Amount" formControlName="Amount" type="text" placeholder="المبلغ" required (change)='Total_Calc()' (keyup)='Total_Calc()' autofocus>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- Price -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Price" type="number" placeholder="سعر التحويل" required (change)='Total_Calc()' (keyup)='Total_Calc()'>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- Total -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Total" type="number" placeholder="الإجمالي" required (change)='Total_Changed()' (keyup)='Total_Changed()'>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Account -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="الحساب المستلم" aria-label="الحساب المستلم" [formControl]="get('ReceiverAccount')" #ReceiverAccount (focus)='ReceiverAccount_AutoComplete("")' [matAutocomplete]="ReceiverAccountAuto">
+                        <mat-autocomplete #ReceiverAccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onReceiverAccountChanged($event)">
+                            <mat-option *ngFor="let option of ReceiverAccountList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='ReceiverAccount_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+                    <!-- ReceiverCommission -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ReceiverCommission" type="text" placeholder="عمولة المستلم">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- City -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="مكان التسليم" aria-label="مكان التسليم" [formControl]="get('DeliveryLocation')" #DeliveryLocation (focus)='DeliveryLocation_AutoComplete("")' [matAutocomplete]="DeliveryLocationAuto" required>
+                        <mat-autocomplete #DeliveryLocationAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onDeliveryLocationChanged($event)">
+                            <mat-option *ngFor="let option of DeliveryLocationList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='DeliveryLocation_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- SenderName -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="SenderName" type="text" placeholder="المرسل">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- SenderPhone -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="SenderPhone" type="text" placeholder="هاتف المرسل">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- ReceiverName -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ReceiverName" type="text" placeholder="المستلم">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- ReceiverPhone -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="ReceiverPhone" type="text" placeholder="هاتف المستلم">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Notes -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("DocumentID").value' (OnSave)='Save()' [UpdateButton]='get("DocumentID").value' (OnUpdate)='Update()' [DeleteButton]='get("DocumentID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()'
+                RefreshButton='true' (OnRefresh)='ngOnInit()' BackButton='true' BackTo="/MoneyTransfer/LocalCurrencyTransfers">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

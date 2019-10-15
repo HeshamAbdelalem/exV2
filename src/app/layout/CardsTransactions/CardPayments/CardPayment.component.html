@@ -1,0 +1,120 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>مدفوعات</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container">
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- DocumentNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentNo" type="text" placeholder="رقم المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- DocumentDate -->
+                    <mat-form-field fxFlex>
+                        <input matInput [matDatepicker]="pickerDocumentDate" (focus)='pickerDocumentDate.open()' placeholder="تاريخ المستند" formControlName="DocumentDate" required>
+                        <mat-datepicker-toggle matSuffix [for]="pickerDocumentDate"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDocumentDate></mat-datepicker>
+                    </mat-form-field>
+                    <!-- DocumentCode -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="DocumentCode" type="text" placeholder="كود المستند">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- ReceiveCard -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="رقم مستند الاستلام" aria-label="رقم مستند الاستلام" [formControl]="get('ReceiveCard')" #ReceiveCard (focus)='ReceiveCard_AutoComplete("")' [matAutocomplete]="ReceiveCardAuto" required>
+                        <mat-autocomplete #ReceiveCardAuto="matAutocomplete" [displayWith]="displayReceiveCardText" (optionSelected)="onReceiveCardChanged($event)">
+                            <mat-option *ngFor="let option of ReceiveCardList" [value]="option">
+                               {{ option.ID }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='ReceiveCard_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+                    </mat-form-field>
+                    <!-- TotalPaid -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="TotalPaid" type="text" placeholder="إجمالي المدفوع">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- Notes -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="Notes" type="text" placeholder="ملاحظات">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-tab-group>
+
+                <!-- CardPaymentDetail -->
+                <mat-tab>
+                    <ng-template mat-tab-label> تفاصيل المدفوعات </ng-template>
+                    <div class='tab-content'>
+
+                        <table class='table table-bordered table-striped'>
+                            <thead>
+                                <tr>
+                                    <th class='serial'>#</th>
+                                    <th> البطاقة </th>
+                                    <th> القيمة </th>
+                                    <th>
+                                        <button mat-icon-button color='primary' (click)='add_CardPaymentDetail()' matTooltip="إضافة صف جديد">
+											<mat-icon>add</mat-icon>
+										</button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container formArrayName="CardPaymentDetail" *ngFor="let prop of formArray('CardPaymentDetail').controls; let i = index;">
+                                    <tr [formGroupName]="i" [class.deleted]="prop?.value?.Status === 3">
+                                        <td class='serial'>
+                                            {{i+1}}
+                                        </td>
+                                        <!-- ReceiveCardDetail -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput type="text" aria-label="البطاقة" formControlName="ReceiveCardDetail" #ReceiveCardDetail [matAutocomplete]="ReceiveCardDetailAuto" required>
+                                                <mat-autocomplete #ReceiveCardDetailAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onReceiveCardDetailChanged($event, i)">
+                                                    <mat-option *ngFor="let option of ReceiveCardDetailList" [value]="option">
+                                                        {{ option.Name }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='ReceiveCardDetail_AutoComplete("")'>
+													<mat-icon>arrow_drop_down</mat-icon>
+												</button>
+                                            </mat-form-field>
+                                        </td>
+                                        <!-- Value -->
+                                        <td>
+                                            <mat-form-field>
+                                                <input matInput formControlName="Value" type="text" required>
+                                            </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button color='warn' (click)='remove_CardPaymentDetail(i)' matTooltip="حذف">
+												<mat-icon class="red">delete_forever</mat-icon>
+											</button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </mat-tab>
+
+            </mat-tab-group>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <app-toolbar [SaveButton]='!get("DocumentID").value' (OnSave)='Save()' [UpdateButton]='get("DocumentID").value' (OnUpdate)='Update()' [DeleteButton]='get("DocumentID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()'
+                RefreshButton='true' (OnRefresh)='ngOnInit()' BackButton='true' BackTo="/CardsTransactions/CardPayments">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

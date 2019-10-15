@@ -1,0 +1,139 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>أسعار التحويلات الداخلية</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <mat-card>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- الحساب -->
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="الحساب" aria-label="الحساب" [formControl]="get('Account')" #Account (focus)='Account_AutoComplete("")' [matAutocomplete]="AccountAuto" required>
+                        <mat-autocomplete #AccountAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onAccountChanged($event)">
+                            <mat-option *ngFor="let option of AccountList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Account_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- المدينة -->
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="المدينة" aria-label="المدينة" [formControl]="get('City')" #City (focus)='City_AutoComplete()' [matAutocomplete]="CityAuto" required>
+                        <mat-autocomplete #CityAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCityChanged($event)">
+                            <mat-option *ngFor="let option of CityList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='City_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- رسم التحويل على كل الف -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="ThousandsCommission" type="text" placeholder="رسم التحويل على كل الف">
+                    </mat-form-field>
+                    <!-- عمولة الحساب -->
+                    <mat-form-field>
+                        <input matInput (keyup.enter)="Display()" formControlName="AccountCommission" type="text" placeholder="عمولة الحساب">
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <div fxFlex>
+                        <app-toolbar SaveButton='true' (OnSave)='Save()' SearchButton='true' (OnSearch)='Display()' ClearButton='true' (OnClear)='Clear()'>
+                        </app-toolbar>
+                    </div>
+                </div>
+            </mat-card>
+            <br>
+
+            <div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+                <mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+
+                <table mat-table #table [dataSource]="dataSource" matSort>
+
+                    <!-- RowNo Column -->
+                    <ng-container matColumnDef="RowNo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                        <td mat-cell *matCellDef="let row">
+                            <div [class.editing]="row?.ID === LocalTransferPrice?.ID">
+                                <span *ngIf="row?.ID !== LocalTransferPrice?.ID">{{ row.RowNo }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- AccountID Column -->
+                    <ng-container matColumnDef="AccountID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>الحساب</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.Account?.Name }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- CityID Column -->
+                    <ng-container matColumnDef="CityID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>المدينة</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.City?.Name }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- ThousandsCommission Column -->
+                    <ng-container matColumnDef="ThousandsCommission">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>رسم التحويل على كل الف</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.ThousandsCommission }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- AccountCommission Column -->
+                    <ng-container matColumnDef="AccountCommission">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>عمولة الحساب</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.AccountCommission }}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- Buttons -->
+                    <ng-container matColumnDef="Links">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <ul>
+                                <li>
+                                    <a mat-icon-button (click)='Edit(row)' matTooltip='تعديل'>
+                                        <mat-icon color="primary">edit</mat-icon>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.ID)'>
+                                        <mat-icon aria-label="delete">delete_forever</mat-icon>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="start">
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card-actions>
+    </mat-card>
+</form>
+
+<!--
+	, 
+	{
+		path: 'LocalTransferPrices',
+		loadChildren: './LocalTransferPrices/LocalTransferPrices.module#LocalTransferPricesModule'
+	}
+	-->

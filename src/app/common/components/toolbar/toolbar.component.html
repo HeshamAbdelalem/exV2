@@ -1,0 +1,150 @@
+<ul class="toolbar-buttons" *ngIf="!isMobileMenu()">
+    <li *ngIf='BackButton'>
+        <button mat-stroked-button (click)='goToList()'>
+      <span>الرجوع للقائمة |</span>
+      <mat-icon>list</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='RefreshButton'>
+        <button mat-stroked-button color="primary" (click)='onRefresh()'>
+      تحديث |
+      <mat-icon>refresh</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='DeleteButton'>
+        <button mat-stroked-button color="warn" (click)='onDelete()'>
+      حذف |
+      <mat-icon>delete_forever</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='UpdateButton'>
+        <button mat-stroked-button color="primary" (click)='onUpdate()'>
+      تعديل |
+      <mat-icon>save</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='NewButton'>
+        <button mat-stroked-button (click)='onNew()'>
+      جديد |
+      <mat-icon>add</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='SaveButton'>
+        <button mat-stroked-button color="primary" (click)='onSave()'>
+      حفظ |
+      <mat-icon>save</mat-icon>
+    </button>
+    </li>
+    <!-- Add-New -->
+    <li *ngIf='AddNewButton'>
+        <button mat-stroked-button (click)='goToDetail()'>
+      جديد |
+      <mat-icon color='primary' class="mat-18">add</mat-icon>
+    </button>
+    </li>
+    <!-- Clear -->
+    <li *ngIf='ClearButton'>
+        <button mat-stroked-button (click)="onClear()">
+      مسح |
+      <mat-icon color='warn' class="mat-18">close</mat-icon>
+    </button>
+    </li>
+    <!-- Search -->
+    <li *ngIf='SearchButton'>
+        <button mat-stroked-button color='primary' (click)="onSearch()">
+      بحث |
+      <mat-icon class="mat-18">search</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='PrintButton'>
+        <button mat-stroked-button color="primary" [matMenuTriggerFor]="menu">
+      طباعة |
+      <mat-icon>print</mat-icon>
+    </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)='onPrint(1)' class="pdf-color">
+        <mat-icon class="pdf-color">picture_as_pdf</mat-icon>
+        <span>PDF</span>
+      </button>
+            <button mat-menu-item (click)='onPrint(2)' class="word-color">
+        <mat-icon class="word-color">text_format</mat-icon>
+        <span>Word</span>
+      </button>
+            <button mat-menu-item (click)='onPrint(3)' class="excel-color">
+        <mat-icon class="excel-color">grid_on</mat-icon>
+        <span>Excel</span>
+      </button>
+        </mat-menu>
+    </li>
+</ul>
+
+<ul class="toolbar-buttons" *ngIf="isMobileMenu()">
+    <li *ngIf='BackButton'>
+        <button mat-icon-button (click)='goToList()' matTooltip='الرجوع للقائمة'>
+      <mat-icon>list</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='RefreshButton'>
+        <button mat-icon-button color="primary" (click)='onRefresh()' matTooltip='تحديث'>
+      <mat-icon>refresh</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='DeleteButton'>
+        <button mat-icon-button color="warn" (click)='onDelete()' matTooltip='حذف'>
+      <mat-icon>delete_forever</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='UpdateButton'>
+        <button mat-icon-button color="primary" (click)='onUpdate()' matTooltip='تعديل'>
+      <mat-icon>save</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='NewButton'>
+        <button mat-icon-button (click)='onNew()' matTooltip='جديد'>
+      <mat-icon>add</mat-icon>
+    </button>
+    </li>
+    <li *ngIf='SaveButton'>
+        <button mat-icon-button color="primary" (click)='onSave()' matTooltip='حفظ'>
+      <mat-icon>save</mat-icon>
+    </button>
+    </li>
+    <!-- Add-New -->
+    <li *ngIf='AddNewButton'>
+        <button mat-icon-button (click)='goToDetail()' matTooltip='جديد'>
+      <mat-icon color='primary' class="mat-18">add</mat-icon>
+    </button>
+    </li>
+    <!-- Clear -->
+    <li *ngIf='ClearButton'>
+        <button mat-icon-button (click)="onClear()" matTooltip='مسح'>
+      <mat-icon color='warn' class="mat-18">close</mat-icon>
+    </button>
+    </li>
+    <!-- Search -->
+    <li *ngIf='SearchButton'>
+        <button mat-icon-button color='primary' (click)="onSearch()" matTooltip='بحث'>
+      <mat-icon class="mat-18">search</mat-icon>
+    </button>
+    </li>
+    <!-- Print -->
+    <li *ngIf='PrintButton'>
+        <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" matTooltip='طباعة'>
+      <mat-icon>print</mat-icon>
+    </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)='onPrint(1)' class="pdf-color">
+        <mat-icon class="pdf-color">picture_as_pdf</mat-icon>
+        <span>PDF</span>
+      </button>
+            <button mat-menu-item (click)='onPrint(2)' class="word-color">
+        <mat-icon class="word-color">text_format</mat-icon>
+        <span>Word</span>
+      </button>
+            <button mat-menu-item (click)='onPrint(3)' class="excel-color">
+        <mat-icon class="excel-color">grid_on</mat-icon>
+        <span>Excel</span>
+      </button>
+        </mat-menu>
+    </li>
+</ul>

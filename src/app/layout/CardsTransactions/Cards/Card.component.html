@@ -1,0 +1,104 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>البطاقات</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="container" mat-dialog-content>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- CardNo -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CardNo" type="text" placeholder="رقم البطاقة" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- CardType -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="نوع البطاقة" aria-label="نوع البطاقة" [formControl]="get('CardType')" #CardType (focus)='CardType_AutoComplete("")' [matAutocomplete]="CardTypeAuto" required>
+                        <mat-autocomplete #CardTypeAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCardTypeChanged($event)">
+                            <mat-option *ngFor="let option of CardTypeList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CardType_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- CardCode -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CardCode" type="text" placeholder="كود البطاقة" required>
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- NameOnCard -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="NameOnCard" type="text" placeholder="الاسم على البطاقة">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- CardOwnerName -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CardOwnerName" type="text" placeholder="اسم صاحب البطاقة">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                    <!-- OwnerPhone -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="OwnerPhone" type="text" placeholder="هاتف صاحب البطاقة">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                    <!-- CardIssuer -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="مصدر البطاقة" aria-label="مصدر البطاقة" [formControl]="get('CardIssuer')" #CardIssuer (focus)='CardIssuer_AutoComplete("")' [matAutocomplete]="CardIssuerAuto">
+                        <mat-autocomplete #CardIssuerAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCardIssuerChanged($event)">
+                            <mat-option *ngFor="let option of CardIssuerList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CardIssuer_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- Bank -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="البنك المصدر" aria-label="البنك المصدر" [formControl]="get('Bank')" #Bank (focus)='Bank_AutoComplete("")' [matAutocomplete]="BankAuto">
+                        <mat-autocomplete #BankAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onBankChanged($event)">
+                            <mat-option *ngFor="let option of BankList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='Bank_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- Currency -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="عملة البطاقة" aria-label="عملة البطاقة" [formControl]="get('CardCurrency')" #CardCurrency (focus)='CardCurrency_AutoComplete("")' [matAutocomplete]="CardCurrencyAuto">
+                        <mat-autocomplete #CardCurrencyAuto="matAutocomplete" [displayWith]="displayText" (optionSelected)="onCardCurrencyChanged($event)">
+                            <mat-option *ngFor="let option of CardCurrencyList" [value]="option">
+                                {{ option.Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button aria-label="arrow_drop_down" (click)='CardCurrency_AutoComplete("")'>
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <!-- CardPin -->
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="CardPin" type="text" placeholder="كلمة مرور البطاقة">
+                        <mat-icon matSuffix color='primary' class="mat-18">text_fields</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end" mat-dialog-actions>
+            <!-- <button mat-raised-button (click)='closeDialog()' [mat-dialog-close]="Card">
+                خروج |
+                <mat-icon class="mat-18">close</mat-icon>
+            </button> -->
+            <app-toolbar [SaveButton]='!get("ID").value' (OnSave)='Save()' [UpdateButton]='get("ID").value' (OnUpdate)='Update()' [DeleteButton]='get("ID").value' (OnDelete)='Delete()' NewButton='true' (OnNew)='New()' RefreshButton='true' (OnRefresh)='ngOnInit()'
+                BackButton='true' BackTo="/CardsTransactions/Cards">
+            </app-toolbar>
+        </mat-card-actions>
+    </mat-card>
+</form>

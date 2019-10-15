@@ -1,0 +1,159 @@
+<form [formGroup]="myForm" dir="rtl" class='main-content'>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>الحساب المصرفي</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+
+			<mat-card>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<!-- المصرف -->
+					<mat-form-field>
+						<input matInput type="text" placeholder="المصرف" aria-label="المصرف" [formControl]="get('Bank')"
+							#Bank (focus)='Bank_AutoComplete("")' [matAutocomplete]="BankAuto" required>
+						<mat-autocomplete #BankAuto="matAutocomplete" [displayWith]="displayText"
+							(optionSelected)="onBankChanged($event)">
+							<mat-option *ngFor="let option of BankList" [value]="option">
+								{{ option.Name }}
+							</mat-option>
+						</mat-autocomplete>
+						<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+							aria-label="arrow_drop_down" (click)='Bank_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+					</mat-form-field>
+					<!-- العملة -->
+					<mat-form-field>
+						<input matInput type="text" placeholder="العملة" aria-label="العملة"
+							[formControl]="get('Currency')" #Currency (focus)='Currency_AutoComplete("")'
+							[matAutocomplete]="CurrencyAuto" required>
+						<mat-autocomplete #CurrencyAuto="matAutocomplete" [displayWith]="displayText"
+							(optionSelected)="onCurrencyChanged($event)">
+							<mat-option *ngFor="let option of CurrencyList" [value]="option">
+								{{ option.Name }}
+							</mat-option>
+						</mat-autocomplete>
+						<button tabindex="-1" class="drop-down-arrow" matSuffix mat-icon-button
+							aria-label="arrow_drop_down" (click)='Currency_AutoComplete("")'>
+							<mat-icon>arrow_drop_down</mat-icon>
+						</button>
+					</mat-form-field>
+					<!-- رقم الحساب -->
+					<mat-form-field>
+						<input matInput (keyup.enter)="Display()" formControlName="Name" type="text"
+							placeholder="رقم الحساب">
+					</mat-form-field>
+				</div>
+				<div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+					<div fxFlex>
+						<app-toolbar AddNewButton='true' AddNewRoute="/Configurations/BankAccounts/0"
+							SearchButton='true' (OnSearch)='Display()' ClearButton='true' (OnClear)='Clear()'>
+						</app-toolbar>
+					</div>
+				</div>
+			</mat-card>
+			<br>
+
+			<div class="mat-elevation-z8" [formGroup]="myForm" flFlex flexLayout="row" flexLayout.lt-md="column">
+
+				<mat-progress-bar mode="query" *ngIf="isLoadingResults"></mat-progress-bar>
+
+				<table mat-table #table [dataSource]="dataSource" matSort>
+
+					<!-- RowNo Column -->
+					<ng-container matColumnDef="RowNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+						<td mat-cell *matCellDef="let row">
+							<div [class.editing]="row?.ID === BankAccount?.ID">
+								<span *ngIf="row?.ID !== BankAccount?.ID">{{ row.RowNo }}</span>
+							</div>
+						</td>
+					</ng-container>
+
+					<!-- Status Column -->
+					<ng-container matColumnDef="Status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>موقوف</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Status }}
+						</td>
+					</ng-container>
+
+					<!-- BankID Column -->
+					<ng-container matColumnDef="BankID">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>المصرف</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Bank?.Name }}
+						</td>
+					</ng-container>
+
+					<!-- CurrencyID Column -->
+					<ng-container matColumnDef="CurrencyID">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>العملة</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Currency?.Name }}
+						</td>
+					</ng-container>
+
+					<!-- StartBalance Column -->
+					<ng-container matColumnDef="StartBalance">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>الرصيد الافتتاحي</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.StartBalance | number }}
+						</td>
+					</ng-container>
+
+					<!-- StartDate Column -->
+					<ng-container matColumnDef="StartDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ فتح الحساب</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.StartDate | date: 'yyyy-MM-dd' }}
+						</td>
+					</ng-container>
+
+
+					<!-- Name Column -->
+					<ng-container matColumnDef="Name">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>رقم الحساب</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.Name }}
+						</td>
+					</ng-container>
+
+
+					<!-- Buttons -->
+					<ng-container matColumnDef="Links">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let row">
+							<ul>
+								<li>
+									<a mat-icon-button routerLink="/Configurations/BankAccounts/{{row.ID}}"
+										matTooltip='تفاصيل'>
+										<mat-icon color="primary">info_outline</mat-icon>
+									</a>
+								</li>
+								<li>
+									<button mat-icon-button color="warn" matTooltip='حذف' (click)='Delete(row.ID)'>
+										<mat-icon aria-label="delete">delete_forever</mat-icon>
+									</button>
+								</li>
+							</ul>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				</table>
+			</div>
+		</mat-card-content>
+		<mat-card-actions align="start">
+			<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+		</mat-card-actions>
+	</mat-card>
+</form>
+
+<!--
+	, 
+	{
+		path: 'BankAccounts',
+		loadChildren: './BankAccounts/BankAccounts.module#BankAccountsModule'
+	}
+	-->

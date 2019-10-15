@@ -1,0 +1,17 @@
+	// import { Pipe, PipeTransform } from '@angular/core';
+ 	
+	// @Pipe({
+	// 	name: 'TextSummary',
+	// 	pure: false
+	// })
+
+	// export class TextSummaryPipe implements PipeTransform {
+
+	//   transform(value: string, len?: any): any {
+	// 		let newValue: string = '';
+	// 		newValue = value.substring(0, len).concat('...');			
+	// 		return newValue;
+	//   }
+
+	// }
+	
