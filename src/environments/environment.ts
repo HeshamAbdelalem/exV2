@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:4449/',
+  api_url: 'http://ex.system-generator.com/',
   pageSize: 10
 };
 
